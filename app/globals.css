@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+/* 1. Tailwind v4 Configuration */
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+
+  --animate-marquee: marquee 25s linear infinite;
+
+  @keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+}
+
+/* 2. Theme Variables */
+@layer base {
+  :root {
+    /* Light Mode (White & Blue) - Default */
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --primary: #2563eb;
+    --secondary: #0ea5e9;
+    --accent: #e0f2fe;
+    --border: #e2e8f0;
+  }
+
+  [data-theme='light-pink'] {
+    /* Light Pink (White & Pink) */
+    --background: #ffffff;
+    --foreground: #4c0519;
+    --primary: #db2777;
+    --secondary: #f43f5e;
+    --accent: #fce7f3;
+    --border: #fbcfe8;
+  }
+
+  [data-theme='dark-navy'] {
+    /* Dark Navy (Black & Navy) */
+    --background: #020617;
+    --foreground: #f8fafc;
+    --primary: #1e3a8a;
+    --secondary: #38bdf8;
+    --accent: #0f172a;
+    --border: #1e293b;
+  }
+
+  [data-theme='dark-grey'] {
+    /* Dark Grey (Black & Grey) */
+    --background: #000000;
+    --foreground: #e2e8f0;
+    --primary: #475569;
+    --secondary: #94a3b8;
+    --accent: #0f1115;
+    --border: #1e293b;
+  }
+
+  /* 3. Seamless Transitions (Using standard CSS to bypass the Turbopack error) */
+  * {
+    transition-property: color, background-color, border-color;
+    transition-duration: 500ms;
+    transition-timing-function: ease-in-out;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
