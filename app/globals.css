@@ -5,6 +5,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
   --color-border: var(--border);
@@ -20,54 +21,51 @@
 /* 2. Theme Variables */
 @layer base {
   :root {
-    /* Light Mode (White & Blue) - Default */
+    /* LIGHT THEME: Crisp White with Purple/Blue/Pink undertones */
     --background: #ffffff;
-    --foreground: #0f172a;
-    --primary: #2563eb;
-    --secondary: #0ea5e9;
-    --accent: #e0f2fe;
-    --border: #e2e8f0;
+    --foreground: #09090b; /* Very dark grey/purple for readable text */
+    
+    --primary: #6d28d9; /* Deep modern violet/purple */
+    --primary-foreground: #ffffff;
+    
+    --secondary: #db2777; /* Subtle pink accent */
+    
+    --accent: #f5f3ff; /* Extremely faint purple for chat bubbles/cards */
+    --border: #e4e4e7; /* Light grey/purple border */
   }
 
-  [data-theme='light-pink'] {
-    /* Light Pink (White & Pink) */
-    --background: #ffffff;
-    --foreground: #4c0519;
-    --primary: #db2777;
-    --secondary: #f43f5e;
-    --accent: #fce7f3;
-    --border: #fbcfe8;
+  .dark {
+    /* DARK THEME: Sleek Black, Grey, and Whitish */
+    --background: #000000; /* True black */
+    --foreground: #ededed; /* Soft whitish text to prevent eye strain */
+    
+    --primary: #f5f5f5; /* Bright whitish-grey for primary buttons/accents */
+    --primary-foreground: #000000; /* Black text on primary elements */
+    
+    --secondary: #a3a3a3; /* Mid-tone grey */
+    
+    --accent: #171717; /* Deep grey for chat bubbles/cards */
+    --border: #262626; /* Subtle dark grey border */
   }
+}
 
-  [data-theme='dark-navy'] {
-    /* Dark Navy (Black & Navy) */
-    --background: #020617;
-    --foreground: #f8fafc;
-    --primary: #1e3a8a;
-    --secondary: #38bdf8;
-    --accent: #0f172a;
-    --border: #1e293b;
-  }
-
-  [data-theme='dark-grey'] {
-    /* Dark Grey (Black & Grey) */
-    --background: #000000;
-    --foreground: #e2e8f0;
-    --primary: #475569;
-    --secondary: #94a3b8;
-    --accent: #0f1115;
-    --border: #1e293b;
-  }
-
-  /* 3. Seamless Transitions (Using standard CSS to bypass the Turbopack error) */
+/* 3. Base Styles & Optimized Transitions */
+@layer base {
   * {
-    transition-property: color, background-color, border-color;
-    transition-duration: 500ms;
-    transition-timing-function: ease-in-out;
+    @apply border-border;
   }
-
+  
   body {
-    background-color: var(--background);
-    color: var(--foreground);
+    @apply bg-background text-foreground antialiased;
+    /* ONLY transition the background and color to prevent performance lag on mobile */
+    transition: background-color 0.4s ease-out, color 0.4s ease-out;
+  }
+}
+
+/* 4. Mobile-Optimized Table & Markdown Scroll Fixes */
+@layer utilities {
+  /* Prevents horizontal overflow on mobile phones when AI generates tables */
+  .prose table {
+    @apply block w-full overflow-x-auto whitespace-nowrap md:whitespace-normal;
   }
 }

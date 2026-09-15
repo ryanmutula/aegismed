@@ -1,46 +1,70 @@
 import Link from 'next/link';
 import ThemeSwitcher from './components/ThemeSwitcher';
-import { ShieldPlus } from 'lucide-react'; 
+import { ShieldPlus, ArrowRight, Sparkles } from 'lucide-react'; 
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 animate-in fade-in zoom-in-95 duration-700">
+    <div className="relative min-h-screen flex flex-col items-center justify-center p-6 overflow-hidden selection:bg-primary/20">
       
-      <div className="absolute top-6 right-6">
+      {/* Ambient Background Glow (Subtle and performant) */}
+      <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden">
+        <div className="absolute top-[-10%] w-[600px] h-[500px] bg-primary/10 dark:bg-primary/5 blur-[100px] rounded-full" />
+      </div>
+
+      {/* Theme Switcher */}
+      <div className="absolute top-6 right-6 z-50">
         <ThemeSwitcher />
       </div>
 
-      <div className="max-w-4xl mx-auto text-center mt-10">
-        <div className="flex justify-center mb-8">
-          <div className="p-4 bg-accent rounded-full border border-border shadow-lg">
-            <ShieldPlus className="w-20 h-20 text-primary" />
+      {/* Main Content */}
+      <div className="relative z-10 max-w-4xl mx-auto text-center animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out mt-10">
+        
+        {/* Glowing Logo Container */}
+        <div className="flex justify-center mb-8 relative">
+          <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-125"></div>
+          <div className="relative p-5 bg-background rounded-3xl border border-border shadow-xl">
+            <ShieldPlus className="w-14 h-14 text-primary" />
           </div>
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-extrabold text-foreground tracking-tight mb-6">
-          Master Your <span className="text-primary">Medical</span> Journey
+        {/* Version Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-foreground border border-border shadow-sm text-sm font-semibold mb-6">
+          <Sparkles className="w-4 h-4 text-primary" />
+          <span>AegisMed ANI v1.0</span>
+        </div>
+
+        {/* Headline with Gradient Text */}
+        <h1 className="text-5xl md:text-7xl font-extrabold text-foreground tracking-tight mb-6 leading-[1.1]">
+          Master Your <br className="hidden sm:block" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+            Medical Journey
+          </span>
         </h1>
         
-        <p className="text-xl md:text-2xl text-foreground/70 mb-12 max-w-2xl mx-auto leading-relaxed">
+        {/* Subheadline */}
+        <p className="text-lg md:text-xl text-foreground/70 mb-12 max-w-2xl mx-auto leading-relaxed">
           The ultimate optimized study platform designed exclusively for students and professionals in the healthcare field.
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-5 justify-center">
+        {/* Call to Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full max-w-md mx-auto sm:max-w-none">
           <Link 
             href="/register" 
-            className="px-8 py-4 bg-primary text-background font-bold rounded-xl text-lg hover:opacity-90 transition-all shadow-xl shadow-primary/20 hover:-translate-y-1"
+            className="group flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto bg-primary text-primary-foreground font-bold rounded-2xl text-lg hover:opacity-90 transition-all shadow-lg shadow-primary/25 hover:-translate-y-1 active:scale-95"
           >
             Create Account
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link 
             href="/login" 
-            className="px-8 py-4 bg-accent text-foreground font-bold rounded-xl text-lg border border-border hover:bg-secondary/10 transition-all hover:-translate-y-1"
+            className="flex items-center justify-center px-8 py-4 w-full sm:w-auto bg-transparent text-foreground font-bold rounded-2xl text-lg border-2 border-border hover:bg-accent hover:border-primary/30 transition-all hover:-translate-y-1 active:scale-95"
           >
             Log In
           </Link>
         </div>
         
-        <div className="mt-16 text-sm text-foreground/50 font-semibold tracking-widest uppercase">
+        {/* Footer Brand */}
+        <div className="mt-24 text-xs text-foreground/40 font-bold tracking-[0.2em] uppercase">
           HBR - Healthcare By Ryan™
         </div>
       </div>

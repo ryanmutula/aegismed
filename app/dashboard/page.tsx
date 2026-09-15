@@ -305,7 +305,7 @@ export default function Dashboard() {
       <div className="flex justify-between items-center mb-10 pb-4 border-b border-border">
         <div>
           <h1 className="text-4xl font-extrabold text-foreground tracking-tight">Curriculum Modules</h1>
-          <p className="text-foreground/70 mt-1">Select any of the 40 units to access notes, quizzes, and your AI tutor.</p>
+          <p className="text-foreground/70 mt-1">Select any of the 40 units to access on request notes, quizzes, and your ANI tutor.</p>
         </div>
         <ThemeSwitcher />
       </div>

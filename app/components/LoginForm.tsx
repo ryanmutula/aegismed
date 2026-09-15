@@ -57,7 +57,7 @@ export default function LoginForm() {
       <form onSubmit={handleLogin} className="flex flex-col space-y-4">
         <input
           type="email"
-          placeholder="University Email Address"
+          placeholder="Your Email Address"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}

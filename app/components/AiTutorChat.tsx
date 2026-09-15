@@ -21,11 +21,11 @@ export default function AiTutorChat({ unitName }: AiTutorProps) {
     const name = localStorage.getItem('user_name');
     if (name) setUserName(name);
     setMessages([
-      { sender: 'tutor', text: `Hello **${name || 'Student'}**. I am your AegisMed AI tutor for **${unitName}**. Ask me clinical questions, request board-style case studies, or prompt me to generate summary tables!` }
+      { sender: 'tutor', text: `Hello **${name || 'Student'}**. I am your AegisMed ANI tutor for **${unitName}**. Ask me clinical questions, request board-style case studies, or prompt me to generate summary tables!` }
     ]);
   }, [unitName]);
 
-  const handleSendMessage = async (e: React.FormEvent, actionType: 'chat' | 'grade' = 'chat') => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || loading) return;
 
@@ -42,7 +42,7 @@ export default function AiTutorChat({ unitName }: AiTutorProps) {
         {
           message: userMessage,
           unit: unitName,
-          action: actionType,
+          action: 'chat', // Hardcoded since we removed grading
         },
         {
           headers: {
@@ -74,7 +74,7 @@ export default function AiTutorChat({ unitName }: AiTutorProps) {
           </div>
         </div>
         <span className="text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
-          AegisMed AI v1.0
+          AegisMed ANI v1.0
         </span>
       </div>
 
@@ -82,12 +82,14 @@ export default function AiTutorChat({ unitName }: AiTutorProps) {
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((msg, idx) => (
           <div key={idx} className={`flex items-start gap-4 ${msg.sender === 'user' ? 'flex-row-reverse' : ''}`}>
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${msg.sender === 'user' ? 'bg-primary text-background' : 'bg-background border border-border text-primary'}`}>
+            
+            {/* Avatar */}
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${msg.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-background border border-border text-primary'}`}>
               {msg.sender === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
             </div>
             
             {/* Message Bubble with Custom Table Styling Overrides */}
-            <div className={`max-w-[85%] p-5 rounded-2xl text-sm leading-relaxed shadow-sm overflow-x-auto ${msg.sender === 'user' ? 'bg-primary text-background font-medium rounded-tr-none' : 'bg-background border border-border text-foreground rounded-tl-none'}`}>
+            <div className={`max-w-[85%] p-5 rounded-2xl text-sm leading-relaxed shadow-sm overflow-x-auto ${msg.sender === 'user' ? 'bg-primary text-primary-foreground font-medium rounded-tr-none' : 'bg-background border border-border text-foreground rounded-tl-none'}`}>
               {msg.sender === 'tutor' ? (
                 <div className="markdown-content space-y-3 prose prose-invert max-w-none [&_table]:w-full [&_table]:border-collapse [&_table]:my-4 [&_th]:bg-accent [&_th]:border [&_th]:border-border [&_th]:p-2.5 [&_th]:text-left [&_td]:border [&_td]:border-border [&_td]:p-2.5">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>
@@ -107,7 +109,7 @@ export default function AiTutorChat({ unitName }: AiTutorProps) {
       </div>
 
       {/* Input Form */}
-      <form onSubmit={(e) => handleSendMessage(e, 'chat')} className="p-4 bg-background border-t border-border flex items-center gap-3">
+      <form onSubmit={handleSendMessage} className="p-4 bg-background border-t border-border flex items-center gap-3">
         <input
           type="text"
           placeholder={`Ask about ${unitName} or request a comparison table...`}
@@ -115,19 +117,15 @@ export default function AiTutorChat({ unitName }: AiTutorProps) {
           onChange={(e) => setInput(e.target.value)}
           className="flex-1 p-4 rounded-xl bg-accent border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground text-sm shadow-inner"
         />
-        <button
-          type="button"
-          onClick={(e) => handleSendMessage(e, 'grade')}
-          className="px-5 py-4 rounded-xl bg-secondary text-secondary-foreground font-semibold text-sm hover:opacity-90 transition-all shadow-sm"
-        >
-          Grade Answer
-        </button>
+        
+        {/* Single Send Button */}
         <button
           type="submit"
           disabled={loading || !input.trim()}
-          className="p-4 rounded-xl bg-primary text-background hover:opacity-90 disabled:opacity-50 transition-all shadow-md flex items-center justify-center"
+          className="px-6 py-4 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 disabled:opacity-50 transition-all shadow-md flex items-center justify-center gap-2"
         >
-          <Send className="w-5 h-5" />
+          <span>Send</span>
+          <Send className="w-4 h-4" />
         </button>
       </form>
     </div>

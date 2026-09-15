@@ -84,7 +84,7 @@ export default function RegistrationForm() {
           />
           <input
             type="email"
-            placeholder="University Email Address"
+            placeholder="Your Email Address"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}

@@ -2,9 +2,9 @@
 
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
+import { Sun, Moon } from 'lucide-react'; 
 
 export default function ThemeSwitcher() {
-  // Pull in resolvedTheme to accurately track system preferences
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -12,45 +12,28 @@ export default function ThemeSwitcher() {
     setMounted(true);
   }, []);
 
-  const themes = [
-    { id: 'light', label: 'light 1.0' },
-    { id: 'light-pink', label: 'light 2.0' },
-    { id: 'dark-navy', label: 'dark 1.0' },
-    { id: 'dark-grey', label: 'dark 2.0' },
-  ];
-
-  // Render an invisible placeholder during SSR to prevent layout shift & hydration loops
+  // Render a tiny invisible placeholder circle during SSR to prevent layout shift
   if (!mounted) {
-    return (
-      <div className="flex flex-wrap gap-3 mb-10 justify-center opacity-0 pointer-events-none" aria-hidden="true">
-        {themes.map((t) => (
-          <div key={`skeleton-${t.id}`} className="px-4 py-2 rounded-lg text-sm font-bold border border-transparent">
-            {t.label}
-          </div>
-        ))}
-      </div>
-    );
+    return <div className="w-10 h-10 rounded-full bg-transparent pointer-events-none" aria-hidden="true" />;
   }
 
-  // Ensure we highlight the correct button even if the user hasn't explicitly set a theme yet
   const currentTheme = theme === 'system' ? resolvedTheme : theme;
 
+  const toggleTheme = () => {
+    setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+  };
+
   return (
-    <div className="flex flex-wrap gap-3 mb-10 justify-center">
-      {themes.map((t) => (
-        <button
-          key={t.id}
-          onClick={() => setTheme(t.id)}
-          className={`px-4 py-2 rounded-lg text-sm font-bold border border-border transition-all
-            ${
-              currentTheme === t.id
-                ? 'bg-primary text-background shadow-md scale-105'
-                : 'bg-accent text-foreground hover:bg-secondary/20'
-            }`}
-        >
-          {t.label}
-        </button>
-      ))}
-    </div>
+    <button
+      onClick={toggleTheme}
+      aria-label="Toggle Dark Mode"
+      className="p-2.5 rounded-full bg-accent border border-border text-foreground shadow-sm hover:scale-110 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+    >
+      {currentTheme === 'dark' ? (
+        <Sun className="w-5 h-5" />
+      ) : (
+        <Moon className="w-5 h-5" />
+      )}
+    </button>
   );
 }
