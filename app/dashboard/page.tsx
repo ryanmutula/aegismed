@@ -14,6 +14,13 @@ import ThemeSwitcher from '../components/ThemeSwitcher';
 
 export default function Dashboard() {
   const units = [
+    {
+      title: "General (Everything Health Sciences)",
+      slug: "general-health-sciences",
+      description: "Best for EXAM and CAT revision. Comprehensive overview of health sciences across all disciplines.",
+      icon: <Home className="w-6 h-6 text-primary" />,
+      progress: 0,
+    },
     // --- Original 20 Units ---
     {
       title: "Pharmacology & Therapeutics",
