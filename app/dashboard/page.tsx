@@ -11,6 +11,7 @@ import {
   BarChart, BriefcaseMedical, Bug, Ambulance 
 } from 'lucide-react';
 import ThemeSwitcher from '../components/ThemeSwitcher';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 export default function Dashboard() {
   const units = [
@@ -306,7 +307,8 @@ export default function Dashboard() {
     },
   ];
 
-  return (
+  return ( 
+  <ProtectedRoute> 
     <div className="w-full max-w-7xl mx-auto animate-in fade-in zoom-in-95 duration-500">
       {/* Top Navigation / Controls */}
       <div className="flex justify-between items-center mb-10 pb-4 border-b border-border">
@@ -349,5 +351,5 @@ export default function Dashboard() {
         ))}
       </div>
     </div>
-  );
+  </ProtectedRoute>);
 }

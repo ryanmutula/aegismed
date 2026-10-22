@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import WelcomeBanner from '../components/WelcomeBanner';
+import ProtectedRoute from '../components/ProtectedRoute';
+
 
 export default function DashboardLayout({
   children,
@@ -17,6 +19,7 @@ export default function DashboardLayout({
   }, []);
 
   return (
+  <ProtectedRoute>
     <div className="flex flex-col min-h-screen">
       <WelcomeBanner userName={currentUserName} />
       
@@ -24,5 +27,6 @@ export default function DashboardLayout({
         {children}
       </main>
     </div>
+  </ProtectedRoute>
   );
 }
