@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react'; // Ensure lucide-react is installed
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
 
@@ -12,6 +13,9 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  
+  // New state for password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
@@ -63,14 +67,28 @@ export default function LoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           className="p-3.5 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
         />
-        <input
-          type="password"
-          placeholder="Password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="p-3.5 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
-        />
+        
+        {/* Password Input Wrapper with Visibility Toggle */}
+        <div className="relative w-full">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3.5 pr-12 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
+          />
+          {/* Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/60 hover:text-primary transition-colors"
+            tabIndex={-1} // Prevents the button from interrupting tab navigation
+          >
+            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+          </button>
+        </div>
+
         <button
           type="submit"
           disabled={loading || !email || !password}

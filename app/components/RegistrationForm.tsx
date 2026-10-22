@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react'; // Ensure lucide-react is installed
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
 
@@ -15,14 +16,48 @@ export default function RegistrationForm() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   
-  // New state for the terms and privacy policy agreement
+  // New states for visibility and terms
+  const [showPassword, setShowPassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const router = useRouter();
 
+  // Password strength calculator
+  const calculateStrength = (pwd: string) => {
+    let score = 0;
+    if (!pwd) return 0;
+    if (pwd.length >= 8) score += 1;
+    if (/[A-Z]/.test(pwd)) score += 1;
+    if (/[0-9]/.test(pwd)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pwd)) score += 1;
+    return score; // Returns 0 to 4
+  };
+
+  const strength = calculateStrength(password);
+
+  const getStrengthColor = (score: number) => {
+    switch (score) {
+      case 1: return 'bg-red-500';
+      case 2: return 'bg-orange-500';
+      case 3: return 'bg-blue-500';
+      case 4: return 'bg-green-500';
+      default: return 'bg-gray-200 dark:bg-gray-700';
+    }
+  };
+
+  const getStrengthText = (score: number) => {
+    switch (score) {
+      case 1: return 'Weak';
+      case 2: return 'Fair';
+      case 3: return 'Good';
+      case 4: return 'Strong';
+      default: return '';
+    }
+  };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agreedToTerms) return; // Extra safeguard
+    if (!agreedToTerms) return;
 
     setLoading(true);
     setMessage('');
@@ -34,7 +69,7 @@ export default function RegistrationForm() {
         password,
       });
       setLoading(false);
-      setStep('verify'); // Switch to OTP input step
+      setStep('verify');
       setMessage('Verification code sent to your email!');
     } catch (err: any) {
       setLoading(false);
@@ -81,7 +116,7 @@ export default function RegistrationForm() {
         <form onSubmit={handleRegister} className="flex flex-col space-y-4">
           <input
             type="text"
-            placeholder="Full Name (e.g. Ryan Mwendwa)"
+            placeholder="Full Name (e.g. Ryan Mutula)"
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
@@ -95,14 +130,47 @@ export default function RegistrationForm() {
             onChange={(e) => setEmail(e.target.value)}
             className="p-3.5 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
           />
-          <input
-            type="password"
-            placeholder="Password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="p-3.5 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
-          />
+          
+          {/* Password Input Wrapper */}
+          <div className="relative w-full">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3.5 pr-12 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
+            />
+            {/* Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/60 hover:text-primary transition-colors"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </div>
+
+          {/* Password Strength Indicator */}
+          {password.length > 0 && (
+            <div className="flex flex-col space-y-1 mt-1">
+              <div className="flex justify-between items-center text-xs px-1">
+                <span className="text-foreground/70">Password strength:</span>
+                <span className={`font-semibold ${strength >= 3 ? 'text-green-500' : 'text-foreground/80'}`}>
+                  {getStrengthText(strength)}
+                </span>
+              </div>
+              <div className="flex gap-1 h-1.5 w-full rounded-full overflow-hidden">
+                {[1, 2, 3, 4].map((level) => (
+                  <div 
+                    key={level} 
+                    className={`flex-1 transition-all duration-300 ${strength >= level ? getStrengthColor(strength) : 'bg-border'}`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
           
           <div className="flex items-start mt-2 mb-2">
             <input 
