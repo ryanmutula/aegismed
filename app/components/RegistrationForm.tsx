@@ -14,11 +14,16 @@ export default function RegistrationForm() {
   const [token, setToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  
+  // New state for the terms and privacy policy agreement
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!agreedToTerms) return; // Extra safeguard
+
     setLoading(true);
     setMessage('');
 
@@ -98,10 +103,33 @@ export default function RegistrationForm() {
             onChange={(e) => setPassword(e.target.value)}
             className="p-3.5 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
           />
+          
+          <div className="flex items-start mt-2 mb-2">
+            <input 
+              type="checkbox" 
+              id="terms" 
+              required 
+              checked={agreedToTerms}
+              onChange={(e) => setAgreedToTerms(e.target.checked)}
+              className="mt-1 mr-3 h-4 w-4 shrink-0 text-primary bg-background border-border rounded focus:ring-2 focus:ring-primary/50 cursor-pointer"
+            />
+            <label htmlFor="terms" className="text-xs text-foreground/80 leading-relaxed cursor-pointer">
+              By creating an account, I acknowledge and explicitly agree that I am bound by the 
+              <Link href="/terms" className="text-primary hover:underline font-semibold mx-1" target="_blank">
+                Terms and Conditions
+              </Link> 
+              and 
+              <Link href="/privacy" className="text-primary hover:underline font-semibold mx-1" target="_blank">
+                Privacy Policy
+              </Link> 
+              for as long as I maintain an account and log in to this platform.
+            </label>
+          </div>
+
           <button
             type="submit"
-            disabled={loading || !fullName || !email || !password}
-            className="mt-4 p-4 rounded-lg bg-primary text-background font-bold text-lg hover:opacity-90 active:scale-95 transition-all shadow-lg disabled:opacity-50"
+            disabled={loading || !fullName || !email || !password || !agreedToTerms}
+            className="mt-2 p-4 rounded-lg bg-primary text-background font-bold text-lg hover:opacity-90 active:scale-95 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Processing...' : 'Register'}
           </button>

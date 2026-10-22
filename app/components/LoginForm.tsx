@@ -78,6 +78,17 @@ export default function LoginForm() {
         >
           {loading ? 'Authenticating...' : 'Log In'}
         </button>
+
+        <p className="text-xs text-center text-foreground/70 mt-4 px-2 leading-relaxed">
+          By logging in, you reaffirm your continuous agreement to our 
+          <Link href="/terms" className="text-primary hover:underline font-semibold mx-1">
+            Terms
+          </Link> 
+          and 
+          <Link href="/privacy" className="text-primary hover:underline font-semibold mx-1">
+            Privacy Policy
+          </Link>.
+        </p>
       </form>
 
       <div className="text-center mt-4">
